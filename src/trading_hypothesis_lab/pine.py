@@ -388,9 +388,13 @@ def _clear_chart_indicators(mcp: McpClient) -> None:
     )
     for ind in indicators:
         entity_id = ind.get("id") or ind.get("entityId") or ind.get("entity_id")
+        name = ind.get("name") or ind.get("title") or ""
         if entity_id:
             try:
-                mcp.call("chart_manage_indicator", {"action": "remove", "id": entity_id})
+                # remove requires BOTH entity_id and the indicator name (per MCP schema);
+                # passing only {"id": ...} silently no-ops and the indicator cap stays full.
+                mcp.call("chart_manage_indicator",
+                         {"action": "remove", "entity_id": entity_id, "indicator": name})
             except McpError:
                 pass
 

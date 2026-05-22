@@ -227,3 +227,47 @@ class TraceEvent:
         d = {"step": self.step, "ok": self.ok, "detail": self.summary, "ms": self.ms}
         d.update(self.extra)
         return d
+
+
+# ---------------------------------------------------------------------------
+# rigor.py output — the strategy fact-checker / rigor benchmark
+# ---------------------------------------------------------------------------
+
+RigorTier = Literal["gate", "dimension", "review"]
+RigorStatus = Literal["pass", "fail", "warn", "not_assessed"]
+
+
+@dataclass
+class RigorCheck:
+    """One rigor check — a Tier-1 hard gate or a Tier-2 scored dimension.
+
+    `status`: pass / fail / warn / not_assessed. A gate that fails makes the whole
+    backtest untrustworthy. A dimension that is `not_assessed` caps the max grade —
+    you can't be rated "robust" on a check that never ran.
+    """
+
+    id: str            # "G1", "D1", ...
+    name: str
+    tier: RigorTier
+    status: RigorStatus
+    detail: str        # plain-language finding
+    metric: str = ""   # optional numeric evidence (e.g. "PF 0.91 over 66 trades")
+
+
+@dataclass
+class RigorReport:
+    """The rigor scorecard for one pasted Pine strategy on one (instrument, timeframe)."""
+
+    instrument: str
+    timeframe: str
+    compiled: bool
+    gates: list[RigorCheck]
+    dimensions: list[RigorCheck]
+    reviews: list[RigorCheck]   # advisory Sonnet 4.6 deep-review findings (not scored)
+    score: int          # 0..100 (0 when a hard gate fails)
+    max_score: int      # 100, reduced when dimensions are not_assessed
+    grade: str          # Untrustworthy | Likely overfit | Promising but fragile | Robust
+    verdict: str        # one-line headline
+    script_path: str | None
+    markdown: str
+    json: dict
