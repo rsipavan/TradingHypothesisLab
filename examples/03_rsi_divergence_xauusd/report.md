@@ -1,43 +1,62 @@
-The video presents a trend-following strategy that combines RSI divergence signals with the 200 EMA as a directional filter â€” going long above the EMA on bullish divergence, short below it on bearish divergence â€” and reports a 70% win rate across 31 trades in forex and gold with roughly 37% portfolio growth from a $1,000 starting balance. None of those claims could be verified against market data: the strategy's performance figures come only from the creator's own backtest, and the broader assertions ("works for all markets," "smaller timeframes carry higher risk") name no falsifiable thresholds. Every claim in this video came back untestable.
+# https://www.youtube.com/watch?v=aHeWIR8kM9o
+
+*strategy_or_claim*
+*https://www.youtube.com/watch?v=aHeWIR8kM9o*
+
+**Overall: UNTESTABLE** | none of the video's claims were checkable against market data
 
 ---
 
-# Research report — https://www.youtube.com/watch?v=aHeWIR8kM9o
+## What This Video Is
 
-**Overall verdict: untestable.** none of the video's claims were checkable against market data
+The video presents a trading strategy combining RSI divergence signals with the 200 EMA as a trend filter, entering trades in the direction of the trend when divergence appears. A backtest of 31 trades across forex and gold markets is shown, claiming a 70% win rate and 37% portfolio growth from $1,000 starting capital with 1% risk per trade and a 1:2 risk-reward ratio. Setup instructions are given for TradingView using the built-in RSI divergence detection and EMA 200 indicator. Recommended timeframes are 15-minute and above.
 
-_Source: https://www.youtube.com/watch?v=aHeWIR8kM9o_
+**3 claims found** | 0 testable
 
-## What this video is
-
-- **Type:** `strategy_or_claim`
-- **Topic:** RSI divergence + EMA 200 trend-following strategy backtest
-- **Summary:** The video presents a trading strategy combining RSI divergence signals with the 200 EMA as a trend filter, entering long when price is above the EMA with bullish divergence and short when below with bearish divergence. The creator reports backtesting 31 trades across forex and gold markets with a claimed 70% win rate, 1:2 risk-reward ratio, and approximately 37% portfolio growth from a $1,000 starting balance. Setup instructions are given for TradingView using built-in RSI divergence detection and the EMA 200 indicator. Recommended timeframes are 15-minute and above.
-- **Has checkable market claims:** yes
+---
 
 ## Claims
 
-| # | Claim | Testable | Test | Verdict |
-|---|---|---|---|---|
-| c1 | This strategy works for gold trading, forex trading, and all markets including day trading. | no | none | **untestable** |
-| c2 | Smaller timeframes yield more trades but carry higher risk than larger timeframes with this strategy. | no | none | **untestable** |
-| c3 | An RSI divergence strategy filtered by EMA 200 (long when price is above EMA 200 with bullish divergence, short when price is below EMA 200 with bearish divergence, 1:2 risk-reward, 1% risk per trade) achieves a 70% win rate across forex and gold markets. | partial | strategy_backtest | **untestable** |
+### Claim 1 of 3 | UNTESTABLE
 
-## Findings
+> An RSI divergence + EMA 200 trend-filter strategy — enter long when price is above EMA 200 and RSI shows bullish divergence; enter short when price is below EMA 200 and RSI shows bearish divergence; exit at 2× stop loss — achieved a 70% win rate and 37% portfolio growth over 31 trades on forex and gold markets, risking 1% per trade.
 
-### c1 — This strategy works for gold trading, forex trading, and all markets including day trading.
+**Why this couldn't be tested:**
+No specific instrument or currency pair named; 'forex and gold markets' is too broad to backtest without disambiguating to a specific ticker — the most common failure mode flagged in prior traces for this test type.
 
-- **Verdict:** untestable — No specific instrument, timeframe, or quantitative performance threshold â€” 'works for all markets' is a marketing assertion with no falsifiable criterion.
-- **Why not testable:** No specific instrument, timeframe, or quantitative performance threshold â€” 'works for all markets' is a marketing assertion with no falsifiable criterion.
-
-### c2 — Smaller timeframes yield more trades but carry higher risk than larger timeframes with this strategy.
-
-- **Verdict:** untestable — 'Risk' is undefined and 'more trades on smaller timeframes' is a structural feature of any time-based chart â€” no instrument, threshold, or quantitative outcome is specified.
-- **Why not testable:** 'Risk' is undefined and 'more trades on smaller timeframes' is a structural feature of any time-based chart â€” no instrument, threshold, or quantitative outcome is specified.
-
-### c3 — An RSI divergence strategy filtered by EMA 200 (long when price is above EMA 200 with bullish divergence, short when price is below EMA 200 with bearish divergence, 1:2 risk-reward, 1% risk per trade) achieves a 70% win rate across forex and gold markets.
-
-- **Verdict:** untestable — this is a full strategy — needs a backtest engine (not in v1)
 ---
 
-_Generated by [TradingHypothesisLab](https://github.com/rsipavan/TradingHypothesisLab) — the video is characterized first, then any checkable claims are validated against market data via the TradingView MCP. Verdicts are computed from the data, not LLM-judged. See the trace for the step-by-step._
+### Claim 2 of 3 | UNTESTABLE
+
+> This RSI divergence + EMA 200 strategy works across all markets including gold, forex, and day trading.
+
+**Why this couldn't be tested:**
+Blanket assertion with no specific instrument, timeframe, or measurable success criterion — not falsifiable as stated.
+
+---
+
+### Claim 3 of 3 | UNTESTABLE
+
+> On timeframes smaller than 15 minutes, this strategy produces more losses and higher risk than on 15-minute-and-above timeframes.
+
+**Why this couldn't be tested:**
+Stated as qualitative advice with no instrument specified, no quantitative loss-rate threshold, and no comparative data provided.
+
+---
+## Overall: UNTESTABLE
+
+none of the video's claims were checkable against market data
+
+---
+
+## How This Was Checked
+
+1. **Transcript fetched** from the video
+2. **Video characterized** — content type, topic, whether it makes checkable claims
+3. **Claims extracted** — each tagged with instrument, timeframe, and test type
+4. **Validated** against real market data via TradingView MCP
+5. **Verdicts computed** from the data — not LLM-judged
+
+---
+
+*Generated by [TradingHypothesisLab](https://github.com/rsipavan/TradingHypothesisLab). Verdicts are computed from market data, not LLM-judged. See the trace file for step-by-step reasoning.*

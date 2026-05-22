@@ -1,6 +1,7 @@
 {
+  "video_id": "aHeWIR8kM9o",
   "content_type": "strategy_or_claim",
   "topic": "RSI divergence + EMA 200 trend-following strategy backtest",
-  "summary": "The video presents a trading strategy combining RSI divergence signals with the 200 EMA as a trend filter, entering long when price is above the EMA with bullish divergence and short when below with bearish divergence. The creator reports backtesting 31 trades across forex and gold markets with a claimed 70% win rate, 1:2 risk-reward ratio, and approximately 37% portfolio growth from a $1,000 starting balance. Setup instructions are given for TradingView using built-in RSI divergence detection and the EMA 200 indicator. Recommended timeframes are 15-minute and above.",
+  "summary": "The video presents a trading strategy combining RSI divergence signals with the 200 EMA as a trend filter, entering trades in the direction of the trend when divergence appears. A backtest of 31 trades across forex and gold markets is shown, claiming a 70% win rate and 37% portfolio growth from $1,000 starting capital with 1% risk per trade and a 1:2 risk-reward ratio. Setup instructions are given for TradingView using the built-in RSI divergence detection and EMA 200 indicator. Recommended timeframes are 15-minute and above.",
   "has_checkable_claims": true
 }

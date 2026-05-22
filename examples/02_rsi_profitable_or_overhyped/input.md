@@ -2,4 +2,4 @@
 
 **URL:** https://www.youtube.com/watch?v=ualY_K-TPe0
 
-**Why this video:** A backtest-results video ('4,000+ trades'). Strategy-shaped claims map to strategy_backtest, which is honestly out of scope in v1 — shows the 'needs a backtest engine' boundary.
+**Why this video:** A backtest-results video (~4,300 trades, +172% claimed on 1H). The Pine backtest engine is now live (see example 06), yet these claims still come back `untestable` for honest structural reasons: the result is a 10-asset portfolio aggregate with 3 FX pairs never named, and the exit rule is unspecified beyond an ATR stop — so it can't be replicated exactly. Shows the epistemic floor holding even when the engine is available.

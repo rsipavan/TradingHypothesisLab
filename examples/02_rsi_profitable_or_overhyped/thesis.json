@@ -1,32 +1,35 @@
 [
   {
-    "claim_id": "c1",
-    "statement": "The RSI(20) momentum strategy (long when RSI crosses above 70, short when RSI crosses below 30, filtered by 200 EMA, ATR\u00c3\u20142 stop-loss) run on the 30-minute timeframe across BTC, ETH, XRP, three FX pairs, Gold, Oil, SPX, and AAPL from December 2022 to December 2024 produces a 49.8% win rate and -36% net result over approximately 2,700 trades.",
-    "instrument": "BTC,ETH,XRP,GOLD,OIL,SPX,AAPL,FX",
+    "id": "c1",
+    "statement": "RSI-20 strategy (RSI cross above 70 = long entry, RSI cross below 30 = short entry, filtered by 200-period EMA, ATR\u00d72 stop loss) backtested on 30-minute charts across 10 assets (BTC, ETH, XRP, Gold, Oil, SPX, AAPL, plus 3 unnamed FX pairs) from December 2022 to December 2024 produced a net loss of 36% with a 49.8% win rate over approximately 2,700 trades.",
+    "instrument": "portfolio: BTC, ETH, XRP, GC, CL, SPX, AAPL + 3 unnamed FX pairs",
     "timeframe": "30m",
-    "testable": "yes",
     "test_type": "strategy_backtest",
-    "verdict": "untestable",
-    "verdict_reason": "this is a full strategy \u2014 needs a backtest engine (not in v1)"
+    "testable": "no",
+    "reason_if_not": "The 3 FX pairs are never named, and the exit trigger is unspecified beyond the ATR\u00d72 stop loss \u2014 no take-profit target or signal-based exit rule is stated, making exact replication impossible.",
+    "confidence": 0.65,
+    "test_type_justification": "Mechanical entry trigger, EMA filter, and volatility-based stop are defined; blocked by unnamed instruments and missing exit logic."
   },
   {
-    "claim_id": "c2",
-    "statement": "The same RSI(20) momentum strategy on the 1-hour timeframe across the same 10 assets and date range produces approximately a 53% win rate and +172% net result over approximately 1,500 trades.",
-    "instrument": "BTC,ETH,XRP,GOLD,OIL,SPX,AAPL,FX",
+    "id": "c2",
+    "statement": "The same RSI-20 / 200 EMA / ATR\u00d72 strategy backtested on 1-hour charts across the same 10 assets from December 2022 to December 2024 produced a net profit of 172% with a 53% win rate over approximately 1,500 trades.",
+    "instrument": "portfolio: BTC, ETH, XRP, GC, CL, SPX, AAPL + 3 unnamed FX pairs",
     "timeframe": "1H",
-    "testable": "yes",
     "test_type": "strategy_backtest",
-    "verdict": "untestable",
-    "verdict_reason": "this is a full strategy \u2014 needs a backtest engine (not in v1)"
+    "testable": "no",
+    "reason_if_not": "The 3 FX pairs are never named, and the exit trigger is unspecified beyond the ATR\u00d72 stop loss.",
+    "confidence": 0.65,
+    "test_type_justification": "Entry, filter, and stop rules are mechanical; replication blocked by unnamed FX pairs and unspecified exit trigger."
   },
   {
-    "claim_id": "c3",
-    "statement": "The same RSI(20) momentum strategy on the daily timeframe across the same 10 assets and date range produces approximately a 53% win rate and +8% net result over approximately 58 trades.",
-    "instrument": "BTC,ETH,XRP,GOLD,OIL,SPX,AAPL,FX",
-    "timeframe": "1D",
-    "testable": "yes",
+    "id": "c3",
+    "statement": "S&P 500 was the best-performing individual asset on the 30-minute timeframe under the RSI-20 / 200 EMA / ATR\u00d72 strategy, producing +61% net profit and a 54% win rate from December 2022 to December 2024.",
+    "instrument": "SPX",
+    "timeframe": "30m",
     "test_type": "strategy_backtest",
-    "verdict": "untestable",
-    "verdict_reason": "this is a full strategy \u2014 needs a backtest engine (not in v1)"
+    "testable": "no",
+    "reason_if_not": "Exit trigger is unspecified beyond the ATR\u00d72 stop loss, preventing exact replication of the result.",
+    "confidence": 0.65,
+    "test_type_justification": "Single named instrument with mechanical entry and stop rules; exit side remains incomplete."
   }
 ]

@@ -1,5 +1,4 @@
-{"step": "transcript.fetch", "ok": true, "detail": "fetched 1,182 words", "ms": 1445}
-{"step": "video.summarize", "ok": true, "detail": "strategy_or_claim \u2014 RSI divergence + EMA 200 trend-following strategy backtest (checkable claims: yes)", "ms": 11392}
-{"step": "thesis.extract", "ok": true, "detail": "3 claim(s): 1 testable, 2 not", "ms": 61143}
-{"step": "validate.run", "ok": false, "detail": "[c3] untestable \u2014 this is a full strategy \u2014 needs a backtest engine (not in v1) (status=error)", "ms": 0, "claim_id": "c3"}
-{"step": "report.build", "ok": true, "detail": "verdict_overall=untestable; 3 claim(s)", "ms": 12458}
+{"step": "transcript.fetch", "ok": true, "detail": "fetched 1,174 words", "ms": 1009}
+{"step": "video.summarize", "ok": true, "detail": "strategy_or_claim \u2014 RSI divergence + EMA 200 trend-following strategy backtest (checkable claims: yes)", "ms": 9960}
+{"step": "thesis.extract", "ok": true, "detail": "3 claim(s): 0 testable, 3 not", "ms": 45541}
+{"step": "report.build", "ok": true, "detail": "verdict_overall=untestable (no testable claims)", "ms": 0}

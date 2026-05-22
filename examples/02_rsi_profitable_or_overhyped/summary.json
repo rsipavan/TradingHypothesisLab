@@ -1,6 +1,7 @@
 {
+  "video_id": "ualY_K-TPe0",
   "content_type": "strategy_or_claim",
-  "topic": "RSI strategy backtest across 4300 trades multiple assets",
-  "summary": "A backtest of an RSI-based trading strategy (RSI length 20, overbought/oversold entries, 200 EMA filter, ATR stop-loss) is run across 10 assets on 30-minute, 1-hour, and daily timeframes using 24 months of data from December 2022 to December 2024. Results show the strategy is unprofitable on the 30-minute frame (-36% net), profitable on the 1-hour frame (+172% net, 53% win rate), and marginally profitable on the daily frame (+8%). The presenter concludes the strategy lacks consistency across all conditions and recommends adding filters. The video also promotes a paid indicator testing bot and the creator's website services.",
+  "topic": "RSI overbought/oversold strategy backtest across 4300 trades",
+  "summary": "A backtest of an RSI strategy using length-20 RSI signals (cross above 70 long, cross below 30 short) filtered by a 200-period EMA and ATR-based stop losses. The test covers 10 assets across 30-minute, 1-hour, and daily timeframes using 24 months of data from December 2022 to December 2024, totaling ~4,300 trades. Results show the strategy was unprofitable on the 30-minute frame (\u201336% net), modestly profitable on the 1-hour frame (+172% net, 53% win rate), and marginally profitable on the daily frame (+8%). The presenter concludes the strategy lacks consistency across timeframes and suggests adding filters to improve robustness.",
   "has_checkable_claims": true
 }
