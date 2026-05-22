@@ -2,9 +2,7 @@
 
 ![tests](https://github.com/rsipavan/TradingHypothesisLab/actions/workflows/test.yml/badge.svg)
 
-![Pipeline demo](demo.gif)
-
-*Live run of the pipeline on a real YouTube trading video: transcript fetch → claim extraction → validation → honest verdict. Above: a strategy that under-specifies its instrument gets classified `untestable` with the structural reason.*
+*Give it a YouTube trading video and it returns an honest verdict: transcript fetch → claim extraction → validation against real market data → `holds` / `fails` / `untestable`. It says `untestable` whenever the video doesn't actually make a checkable claim — which is most of the time.*
 
 I got tired of watching trading videos that confidently claim a strategy "works consistently" with nothing to back it up. So I built a system that checks.
 
@@ -216,7 +214,7 @@ A few things I kept coming back to while building this:
 | Example | Video type | Verdict |
 |---------|-----------|---------|
 | [01 — RSI + Bollinger Bands backtest](examples/01_rsi_bollinger_tested_2025/) | Strategy backtest (video author's own test) | untestable — no MCP-resolvable claims |
-| [02 — RSI: profitable or overhyped?](examples/02_rsi_profitable_or_overhyped/) | Market commentary | untestable — opinion, not checkable |
+| [02 — RSI: profitable or overhyped?](examples/02_rsi_profitable_or_overhyped/) | Strategy backtest (10 assets × 3 timeframes) | untestable — predates Pine engine, pending re-run |
 | [03 — RSI divergence on XAUUSD](examples/03_rsi_divergence_xauusd/) | Educational explainer | untestable — strategy without named instrument |
 | [04 — AlphaInsider promo walkthrough](examples/04_alphainsider_promo_walkthrough/) | Promotion | untestable — no checkable claim |
 | [05 — ORB acceptance short, no claims](examples/05_orb_acceptance_short_no_claims/) | Short / mindset | untestable — no claims |
@@ -228,23 +226,24 @@ A few things I kept coming back to while building this:
 
 ## Run history (live)
 
-Aggregated outcomes across every video I've put through the pipeline. Updated as the corpus grows. The point of these numbers isn't to look impressive — it's to demonstrate the verdict distribution the design produces.
+Aggregated outcomes across every video I've put through the pipeline. These numbers are computed from the committed example reports by [`scripts/run_history.py`](scripts/run_history.py) — re-run it to refresh as the corpus grows. The point isn't to look impressive; it's to show the verdict distribution the design actually produces.
 
 | Metric | Count | % |
 |--------|-------|---|
-| Total videos processed | _TBD_ | 100% |
-| Videos producing a testable claim | _TBD_ | _TBD_% |
-| Verdict: `pass` (claim holds against data) | _TBD_ | _TBD_% |
-| Verdict: `fail` (claim contradicted by data) | _TBD_ | _TBD_% |
-| Verdict: `partial` (mixed evidence) | _TBD_ | _TBD_% |
-| Verdict: `untestable` (claim well-formed but unverifiable) | _TBD_ | _TBD_% |
-| Verdict: `error` (pipeline failure, recoverable next run) | _TBD_ | _TBD_% |
+| Total videos processed | 8 | 100% |
+| Videos producing a testable claim | 3 | 38% |
+| Verdict: `pass` (claim holds against data) | 1 | 12% |
+| Verdict: `fail` (claim contradicted by data) | 1 | 12% |
+| Verdict: `partial` (mixed evidence) | 0 | 0% |
+| Verdict: `untestable` (claim well-formed but unverifiable) | 6 | 75% |
+| Verdict: `error` (pipeline failure, recoverable next run) | 0 | 0% |
 
 **Top reasons for `untestable`:**
-- _TBD_ — strategy described without a specific instrument
-- _TBD_ — claim is a directional opinion (no falsifiable threshold)
-- _TBD_ — video is mindset / promotional content (no checkable claim)
-- _TBD_ — required input missing (timeframe, stop rule, etc.)
+- 3 — strategy/claim described without a specific instrument
+- 3 — no checkable claim extracted (promotional / mindset / educational video)
+- 2 — a point made in passing, not a falsifiable claim
+
+> Examples 02–03 were generated before the Pine backtest engine existed (example 06 shows it running end-to-end). Four of their strategy claims still carry the older `untestable — needs a backtest engine` verdict and are pending a re-run; the table reflects the committed corpus exactly rather than papering over that.
 
 The `untestable` plurality is expected and is the point. Most trading content is uncheckable. A system that produces verdicts for everything is producing fabrications.
 
