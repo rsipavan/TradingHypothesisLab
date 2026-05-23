@@ -1,0 +1,164 @@
+{
+  "instrument": "BINANCE:BTCUSDT",
+  "timeframe": "D",
+  "engine": "python",
+  "engine_note": "modelled 'supertrend' on free OHLCV (BTC-USD, 3652 bars, D); a faithful re-implementation of the logic, not the literal Pine on TradingView. archetype inferred via llm (confidence 99%). Pine syntax not verified (no TradingView connected); rigor reflects the strategy logic.",
+  "archetype": "supertrend",
+  "archetype_confidence": 0.99,
+  "pine_compile_verified": false,
+  "compiled": true,
+  "baseline": {
+    "total_trades": 102,
+    "win_rate": 0.382,
+    "net_profit_pct": 532.04,
+    "profit_factor": 1.83,
+    "max_drawdown_pct": 114.6
+  },
+  "grade": "Likely overfit",
+  "score": 31,
+  "max_score": 100,
+  "verdict": "This is an always-in-market Supertrend reversal swing strategy \u2014 medium holding periods, no stops, position rides until the next flip. The decisive failure is D1: in-sample PF 2.54 collapses to OOS PF 0.66 across 36 trades, meaning the strategy actively loses money on unseen data \u2014 not marginal degradation but a full edge reversal, the clearest hallmark of curve-fitting. This is compounded by L4 FAIL (zero commission and zero slippage in source), which means the already-collapsed OOS figure is still flattering the real result; multi-instrument and multi-timeframe passes suggest a genuine direc",
+  "script_path": "D:\\git projects\\agent-research-lab\\examples\\rigor_supertrend_btc_overfit\\strategy.pine",
+  "gates": [
+    {
+      "id": "G1",
+      "name": "Look-ahead bias",
+      "tier": "gate",
+      "status": "pass",
+      "detail": "no future-data access detected (no lookahead_on, no unguarded MTF read).",
+      "metric": ""
+    },
+    {
+      "id": "G2",
+      "name": "Repainting",
+      "tier": "gate",
+      "status": "pass",
+      "detail": "evaluates on confirmed bars (calc_on_every_tick default false).",
+      "metric": ""
+    },
+    {
+      "id": "G3",
+      "name": "Sufficient sample",
+      "tier": "gate",
+      "status": "pass",
+      "detail": "102 trades \u2014 enough to draw a conclusion.",
+      "metric": "102 trades"
+    },
+    {
+      "id": "G4",
+      "name": "Friction illusion",
+      "tier": "gate",
+      "status": "pass",
+      "detail": "edge survives realistic costs (PF 1.83 -> 1.80).",
+      "metric": "PF 1.83->1.80"
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "D1",
+      "name": "Out-of-sample",
+      "tier": "dimension",
+      "status": "fail",
+      "detail": "edge degrades out-of-sample: in-sample PF 2.54 -> OOS PF 0.66 (36 OOS trades) \u2014 sign of curve-fitting.",
+      "metric": "IS 2.54 / OOS 0.66"
+    },
+    {
+      "id": "D2",
+      "name": "Overfitting surface",
+      "tier": "dimension",
+      "status": "pass",
+      "detail": "2 tunable inputs vs 102 trades (51 trades/param) \u2014 low degrees of freedom.",
+      "metric": "2 inputs / 102 trades"
+    },
+    {
+      "id": "D3",
+      "name": "Multi-timeframe",
+      "tier": "dimension",
+      "status": "pass",
+      "detail": "edge persists on a neighbouring timeframe (240: PF 1.06, W: PF 7.00) \u2014 not a single-TF cherry-pick.",
+      "metric": "240: PF 1.06, W: PF 7.00"
+    },
+    {
+      "id": "D4",
+      "name": "Multi-instrument",
+      "tier": "dimension",
+      "status": "pass",
+      "detail": "edge generalizes to another instrument (NASDAQ:QQQ: PF 1.24).",
+      "metric": "NASDAQ:QQQ: PF 1.24"
+    },
+    {
+      "id": "D5",
+      "name": "Inverse-edge / luck",
+      "tier": "dimension",
+      "status": "pass",
+      "detail": "the inverse strategy loses (inverse PF 0.55 vs strategy PF 1.83) \u2014 the directional edge is real, not coin-flip.",
+      "metric": "PF 1.83 / inverse 0.55"
+    },
+    {
+      "id": "D6",
+      "name": "Risk profile",
+      "tier": "dimension",
+      "status": "pass",
+      "detail": "return/drawdown 4.6 (net +532.04% vs max DD 114.60%).",
+      "metric": "return/DD 4.6"
+    },
+    {
+      "id": "D7",
+      "name": "Cost survival",
+      "tier": "dimension",
+      "status": "pass",
+      "detail": "edge mostly survives realistic costs (PF 1.83 -> 1.80, gave back 0.03).",
+      "metric": "PF 1.83->1.80"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "L1",
+      "name": "Look-ahead / repaint",
+      "tier": "review",
+      "status": "pass",
+      "detail": "No security()/request.*() calls; strategy() defaults calc_on_every_tick=false, so ta.supertrend and ta.change(dir) are evaluated on confirmed bar-close values only.",
+      "metric": ""
+    },
+    {
+      "id": "L2",
+      "name": "Overfitting",
+      "tier": "review",
+      "status": "warn",
+      "detail": "Only two tunable inputs (atrPeriod=10, factor=3.0) \u2014 low count, but both are trivially grid-searched; no out-of-sample window is enforced, so reported results likely reflect the optimised pair for the visible history.",
+      "metric": ""
+    },
+    {
+      "id": "L3",
+      "name": "Cherry-picking",
+      "tier": "review",
+      "status": "pass",
+      "detail": "No hardcoded date ranges, session filters, or symbol-specific conditionals; the strategy is symbol- and timeframe-agnostic on its face.",
+      "metric": ""
+    },
+    {
+      "id": "L4",
+      "name": "Cost & fill realism",
+      "tier": "review",
+      "status": "fail",
+      "detail": "strategy() is declared with no commission_type, commission_value, or slippage arguments, so both default to zero; strategy.entry() fills at next-bar open with no slippage model, overstating net P&L.",
+      "metric": ""
+    },
+    {
+      "id": "L5",
+      "name": "Position sizing / risk",
+      "tier": "review",
+      "status": "warn",
+      "detail": "strategy.entry() uses no explicit qty or default_qty_type/default_qty_value, so lot size is platform-default (1 contract); there is no stop-loss \u2014 the only exit is the opposing strategy.entry(), meaning losses ride until the next Supertrend flip.",
+      "metric": ""
+    },
+    {
+      "id": "L6",
+      "name": "Logic soundness",
+      "tier": "review",
+      "status": "pass",
+      "detail": "ta.change(dir) < 0 correctly detects the dir 1\u2192\u22121 transition (bullish flip) for Long entry and > 0 detects \u22121\u21921 (bearish flip) for Short entry; the always-in-market reversal mechanic is internally consistent with the Supertrend definition.",
+      "metric": ""
+    }
+  ]
+}
