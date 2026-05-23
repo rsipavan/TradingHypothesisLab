@@ -25,6 +25,11 @@ traces/*.jsonl
 runs/*
 !runs/.gitkeep
 
+# operationalization memory — accumulates one record per run, like traces/ and runs/.
+# Regenerated locally on first run (knowledge.append creates the file + dir).
+knowledge/*.jsonl
+!knowledge/.gitkeep
+
 # free-OHLCV cache for the rigor checker's Python backtest engine
 .cache/
 
