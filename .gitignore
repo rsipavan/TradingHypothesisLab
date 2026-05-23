@@ -25,6 +25,12 @@ traces/*.jsonl
 runs/*
 !runs/.gitkeep
 
+# free-OHLCV cache for the rigor checker's Python backtest engine
+.cache/
+
+# ad-hoc live rigor runs
+_live_*
+
 # editor / OS
 .vscode/
 .idea/

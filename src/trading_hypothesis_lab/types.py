@@ -268,6 +268,7 @@ class RigorReport:
     max_score: int      # 100, reduced when dimensions are not_assessed
     grade: str          # Untrustworthy | Likely overfit | Promising but fragile | Robust
     verdict: str        # one-line headline
+    engine_note: str    # how the empirical battery was run (modelled archetype, data source)
     script_path: str | None
     markdown: str
     json: dict
