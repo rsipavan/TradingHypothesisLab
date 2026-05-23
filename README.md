@@ -10,6 +10,8 @@ You give it a YouTube URL. It pulls the transcript, figures out what kind of vid
 
 It's not a trading bot. It doesn't generate signals or execute trades. The domain is trading content. The engineering pattern — deterministic evaluation, observable workflows, graceful degradation — applies to any autonomous research pipeline operating under uncertainty.
 
+**The repo does two things now.** The pipeline above judges a *video's* claim. A second tool — the **rigor checker** — judges a *strategy you already have*: paste a Pine script and it scores whether the backtest is trustworthy (not whether it's profitable). Same philosophy, sharper target. Scroll to **The rigor checker** below.
+
 **→ Read [`docs/REASONING.md`](docs/REASONING.md) for the deep-dive on the design choice that defines this system: why "untestable" is a first-class verdict, and why most autonomous validation systems get this wrong.** Also published as an essay: [Why "untestable" is a first-class verdict](https://rsaipavan.substack.com/p/why-untestable-is-a-first-class-verdict).
 
 *Built by [R Sai Pavan](https://www.linkedin.com/in/sai-pavan-86635b23/) · saipavan.pilot1@gmail.com*
@@ -164,6 +166,43 @@ flowchart LR
 
 ---
 
+## The rigor checker — is this backtest trustworthy?
+
+The video pipeline judges someone else's *claim*. The rigor checker judges a strategy *you already have*: **paste a TradingView Pine strategy and it scores whether the backtest is trustworthy — not whether it's profitable.** Most strategy backtests that look incredible are quietly fooling their author — look-ahead bias, a sample too small to mean anything, an "edge" that only exists on one timeframe, or one that evaporates the instant you add commission. This finds that.
+
+```bash
+python -m trading_hypothesis_lab.rigor strategy.pine --instrument SPY --timeframe D
+python -m trading_hypothesis_lab.rigor strategy.pine -i BINANCE:BTCUSDT -t 240 --instruments ETHUSD
+```
+
+Two static gates read the source (look-ahead, repainting). Then an empirical battery runs — and here's the part that matters: **it needs no TradingView, no subscription, no API key beyond your LLM backend.** It infers which well-known archetype the strategy is (RSI mean-reversion, MA/MACD cross, Supertrend, Bollinger reversion, Donchian breakout, opening-range breakout), re-implements it in a small **lookahead-free** Python engine, and backtests it on **free OHLCV** (Yahoo, installed automatically). That unlocks the checks that actually catch self-deception:
+
+- **Out-of-sample** — a real date split; does the edge survive unseen data?
+- **Inverse-edge** — reverse every entry and exit; if *that* also wins, the signal is noise, not direction.
+- **Multi-timeframe / multi-instrument** — is the edge real, or a cherry-pick?
+- **Friction** — how much of it survives realistic commission and slippage?
+
+A Sonnet 4.6 deep review reads the source for the subtler issues a regex misses, and the final grade is reasoned **in context** — a scalper and a swing system don't get held to the same trade count.
+
+Real output — a Supertrend trend-follower on BTC:
+
+```
+Grade: Likely overfit (33/100) — the decisive factor is the out-of-sample collapse:
+in-sample PF 2.54 crashing to OOS PF 0.66 means it's a net loser on unseen data.
+
+G1 Look-ahead      PASS   no future-data access
+G2 Repainting      PASS   confirmed-bar evaluation
+G3 Sample          PASS   102 trades — enough to conclude
+D1 Out-of-sample   FAIL   in-sample PF 2.54 → OOS PF 0.66 — curve-fitting
+D5 Inverse-edge    PASS   inverse PF 0.05 — the directional edge is real, not a coin flip
+```
+
+It's honest about its own reach: the engine models the strategy's *inferred logic*, not the literal Pine on TradingView — every scorecard says so and reports the inference confidence. A strategy that maps to no known archetype, or fires too few trades, gets `not_assessed` on the affected checks, which caps the grade below *Robust*. You can't be rated robust on a check that never ran — the same epistemic floor as the rest of the repo.
+
+Full rubric: [`docs/rigor_rubric.md`](docs/rigor_rubric.md).
+
+---
+
 ## Code layout
 
 ```
@@ -181,7 +220,12 @@ src/trading_hypothesis_lab/
 ├── llm.py             # backend-agnostic LLM: claude CLI (default) | Anthropic API | Gemini API
 ├── mcp_client.py      # thin TradingView MCP client (retries, error → untestable, never crashes a run)
 ├── config.py          # loads config.yml + .env
-└── types.py           # the dataclasses passed between modules
+├── types.py           # the dataclasses passed between modules
+│   # ── the rigor checker (second capability; TradingView-independent) ──
+├── rigor.py           # paste a Pine strategy → trustworthiness scorecard (gates + dims + grade)
+├── backtest.py        # 7 strategy archetypes + lookahead-free backtest engine + Pine→archetype inference
+├── empirical.py       # runs the rigor battery (OOS split, inverse-edge, multi-TF/instrument) → EmpiricalResults
+└── freedata.py        # free OHLCV (Yahoo) + TradingView-symbol/timeframe mapping, cached
 
 knowledge/
 └── store.jsonl        # append-only operationalization memory (committed; grows across runs)
@@ -265,6 +309,9 @@ python -m trading_hypothesis_lab.orchestrate "https://youtu.be/..." --watchlist 
 
 # run the Telegram bot
 python -m trading_hypothesis_lab.telegram_bot
+
+# rigor-check a Pine strategy (no TradingView needed)
+python -m trading_hypothesis_lab.rigor strategy.pine -i SPY -t D --instruments QQQ
 ```
 
 **No API key needed by default.** The pipeline auto-detects an LLM backend in this order:
@@ -299,6 +346,7 @@ No live trading. No exchange connections. No strategy library. No "AI finds prof
 ## Docs
 
 - [`docs/REASONING.md`](docs/REASONING.md) — **start here** — why "untestable" is a first-class verdict, the design choice that defines this system
+- [`docs/rigor_rubric.md`](docs/rigor_rubric.md) — the rigor checker's full rubric: gates, scored dimensions, and how the TradingView-independent engine runs
 - [`docs/decision_logic.md`](docs/decision_logic.md) — how the system decides what counts as a testable claim and which test type to run
 - [`docs/validation_logic.md`](docs/validation_logic.md) — what the validation actually does, what it can and can't conclude
 - [`docs/failure_handling.md`](docs/failure_handling.md) — every failure mode documented: no transcript, ambiguous claim, MCP error, compile failure — what happens and why
