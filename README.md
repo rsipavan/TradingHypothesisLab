@@ -228,7 +228,7 @@ src/trading_hypothesis_lab/
 └── freedata.py        # free OHLCV (Yahoo) + TradingView-symbol/timeframe mapping, cached
 
 knowledge/
-└── store.jsonl        # append-only operationalization memory (committed; grows across runs)
+└── store.jsonl        # append-only operationalization memory (created locally, gitignored; grows across runs)
 ```
 
 Each module has one job and a small typed interface. The full data contract is in [`docs/architecture.md`](docs/architecture.md).
