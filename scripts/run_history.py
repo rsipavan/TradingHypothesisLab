@@ -34,6 +34,8 @@ def categorize_untestable(reason: str) -> str:
     r = (reason or "").lower()
     if "backtest engine" in r or "not in v1" in r:
         return PRE_PINE
+    if "multi-asset" in r or "portfolio" in r:
+        return "multi-asset portfolio claim — not reproducible on a single-symbol backtest"
     if "instrument" in r:
         return "strategy/claim described without a specific instrument"
     if any(k in r for k in ("opinion", "marketing", "assertion", "unfalsifiable",
@@ -41,6 +43,8 @@ def categorize_untestable(reason: str) -> str:
         return "directional opinion / assertion (no falsifiable threshold)"
     if "checkable claim" in r:
         return "point made in passing, not a checkable claim"
+    if any(k in r for k in ("exit", "take-profit", "replicat", "unspecified")):
+        return "strategy rules underspecified (no exit/target rule — can't replicate exactly)"
     if any(k in r for k in ("timeframe", "missing", "required input")):
         return "required input missing (timeframe, stop rule, threshold)"
     return "other / unspecified"

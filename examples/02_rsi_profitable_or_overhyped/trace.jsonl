@@ -1,7 +1,4 @@
-{"step": "transcript.fetch", "ok": true, "detail": "fetched 1,343 words", "ms": 1184}
-{"step": "video.summarize", "ok": true, "detail": "strategy_or_claim \u2014 RSI strategy backtest across 4300 trades multiple assets (checkable claims: yes)", "ms": 20854}
-{"step": "thesis.extract", "ok": true, "detail": "3 claim(s): 3 testable, 0 not", "ms": 38301}
-{"step": "validate.run", "ok": false, "detail": "[c1] untestable \u2014 this is a full strategy \u2014 needs a backtest engine (not in v1) (status=error)", "ms": 0, "claim_id": "c1"}
-{"step": "validate.run", "ok": false, "detail": "[c2] untestable \u2014 this is a full strategy \u2014 needs a backtest engine (not in v1) (status=error)", "ms": 0, "claim_id": "c2"}
-{"step": "validate.run", "ok": false, "detail": "[c3] untestable \u2014 this is a full strategy \u2014 needs a backtest engine (not in v1) (status=error)", "ms": 0, "claim_id": "c3"}
-{"step": "report.build", "ok": true, "detail": "verdict_overall=untestable; 3 claim(s)", "ms": 14305}
+{"step": "transcript.fetch", "ok": true, "detail": "fetched 1,343 words", "ms": 1020}
+{"step": "video.summarize", "ok": true, "detail": "strategy_or_claim \u2014 RSI overbought/oversold strategy backtest across 4300 trades (checkable claims: yes)", "ms": 9311}
+{"step": "thesis.extract", "ok": true, "detail": "3 claim(s): 0 testable, 3 not", "ms": 90007}
+{"step": "report.build", "ok": true, "detail": "verdict_overall=untestable (no testable claims)", "ms": 0}

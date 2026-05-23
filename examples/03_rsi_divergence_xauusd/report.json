@@ -1,5 +1,5 @@
 {
-  "run_id": "aHeWIR8kM9o-20260510T074552Z",
+  "run_id": "aHeWIR8kM9o-20260522T185620Z",
   "video": {
     "id": "aHeWIR8kM9o",
     "url": "https://www.youtube.com/watch?v=aHeWIR8kM9o",
@@ -9,7 +9,7 @@
   "video_summary": {
     "content_type": "strategy_or_claim",
     "topic": "RSI divergence + EMA 200 trend-following strategy backtest",
-    "summary": "The video presents a trading strategy combining RSI divergence signals with the 200 EMA as a trend filter, entering long when price is above the EMA with bullish divergence and short when below with bearish divergence. The creator reports backtesting 31 trades across forex and gold markets with a claimed 70% win rate, 1:2 risk-reward ratio, and approximately 37% portfolio growth from a $1,000 starting balance. Setup instructions are given for TradingView using built-in RSI divergence detection and the EMA 200 indicator. Recommended timeframes are 15-minute and above.",
+    "summary": "The video presents a trading strategy combining RSI divergence signals with the 200 EMA as a trend filter, entering trades in the direction of the trend when divergence appears. A backtest of 31 trades across forex and gold markets is shown, claiming a 70% win rate and 37% portfolio growth from $1,000 starting capital with 1% risk per trade and a 1:2 risk-reward ratio. Setup instructions are given for TradingView using the built-in RSI divergence detection and EMA 200 indicator. Recommended timeframes are 15-minute and above.",
     "has_checkable_claims": true
   },
   "verdict_overall": "untestable",
@@ -17,45 +17,36 @@
   "findings": [
     {
       "claim_id": "c1",
-      "statement": "This strategy works for gold trading, forex trading, and all markets including day trading.",
+      "statement": "An RSI divergence + EMA 200 trend-filter strategy \u2014 enter long when price is above EMA 200 and RSI shows bullish divergence; enter short when price is below EMA 200 and RSI shows bearish divergence; exit at 2\u00d7 stop loss \u2014 achieved a 70% win rate and 37% portfolio growth over 31 trades on forex and gold markets, risking 1% per trade.",
       "instrument": null,
-      "timeframe": null,
+      "timeframe": "15m",
       "testable": "no",
-      "test_type": "none",
+      "test_type": "strategy_backtest",
       "verdict": "untestable",
-      "verdict_reason": "No specific instrument, timeframe, or quantitative performance threshold \u00e2\u20ac\u201d 'works for all markets' is a marketing assertion with no falsifiable criterion.",
-      "validation": null
+      "verdict_reason": "No specific instrument or currency pair named; 'forex and gold markets' is too broad to backtest without disambiguating to a specific ticker \u2014 the most common failure mode flagged in prior traces for this test type.",
+      "validations": []
     },
     {
       "claim_id": "c2",
-      "statement": "Smaller timeframes yield more trades but carry higher risk than larger timeframes with this strategy.",
+      "statement": "This RSI divergence + EMA 200 strategy works across all markets including gold, forex, and day trading.",
       "instrument": null,
       "timeframe": null,
       "testable": "no",
       "test_type": "none",
       "verdict": "untestable",
-      "verdict_reason": "'Risk' is undefined and 'more trades on smaller timeframes' is a structural feature of any time-based chart \u00e2\u20ac\u201d no instrument, threshold, or quantitative outcome is specified.",
-      "validation": null
+      "verdict_reason": "Blanket assertion with no specific instrument, timeframe, or measurable success criterion \u2014 not falsifiable as stated.",
+      "validations": []
     },
     {
       "claim_id": "c3",
-      "statement": "An RSI divergence strategy filtered by EMA 200 (long when price is above EMA 200 with bullish divergence, short when price is below EMA 200 with bearish divergence, 1:2 risk-reward, 1% risk per trade) achieves a 70% win rate across forex and gold markets.",
+      "statement": "On timeframes smaller than 15 minutes, this strategy produces more losses and higher risk than on 15-minute-and-above timeframes.",
       "instrument": null,
       "timeframe": null,
-      "testable": "partial",
-      "test_type": "strategy_backtest",
+      "testable": "no",
+      "test_type": "none",
       "verdict": "untestable",
-      "verdict_reason": "this is a full strategy \u2014 needs a backtest engine (not in v1)",
-      "validation": {
-        "status": "error",
-        "tradingview_query": "",
-        "data_summary": "",
-        "occurrences": null,
-        "hit_rate": null,
-        "result": "untestable \u2014 this is a full strategy \u2014 needs a backtest engine (not in v1)",
-        "caveats": [],
-        "error": "this is a full strategy \u2014 needs a backtest engine (not in v1)"
-      }
+      "verdict_reason": "Stated as qualitative advice with no instrument specified, no quantitative loss-rate threshold, and no comparative data provided.",
+      "validations": []
     }
   ]
 }

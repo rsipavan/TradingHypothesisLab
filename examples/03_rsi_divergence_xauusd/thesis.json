@@ -1,32 +1,35 @@
 [
   {
-    "claim_id": "c1",
-    "statement": "This strategy works for gold trading, forex trading, and all markets including day trading.",
+    "id": "c1",
+    "statement": "An RSI divergence + EMA 200 trend-filter strategy \u2014 enter long when price is above EMA 200 and RSI shows bullish divergence; enter short when price is below EMA 200 and RSI shows bearish divergence; exit at 2\u00d7 stop loss \u2014 achieved a 70% win rate and 37% portfolio growth over 31 trades on forex and gold markets, risking 1% per trade.",
     "instrument": null,
-    "timeframe": null,
-    "testable": "no",
-    "test_type": "none",
-    "verdict": "untestable",
-    "verdict_reason": "No specific instrument, timeframe, or quantitative performance threshold \u00e2\u20ac\u201d 'works for all markets' is a marketing assertion with no falsifiable criterion."
-  },
-  {
-    "claim_id": "c2",
-    "statement": "Smaller timeframes yield more trades but carry higher risk than larger timeframes with this strategy.",
-    "instrument": null,
-    "timeframe": null,
-    "testable": "no",
-    "test_type": "none",
-    "verdict": "untestable",
-    "verdict_reason": "'Risk' is undefined and 'more trades on smaller timeframes' is a structural feature of any time-based chart \u00e2\u20ac\u201d no instrument, threshold, or quantitative outcome is specified."
-  },
-  {
-    "claim_id": "c3",
-    "statement": "An RSI divergence strategy filtered by EMA 200 (long when price is above EMA 200 with bullish divergence, short when price is below EMA 200 with bearish divergence, 1:2 risk-reward, 1% risk per trade) achieves a 70% win rate across forex and gold markets.",
-    "instrument": null,
-    "timeframe": null,
-    "testable": "partial",
+    "timeframe": "15m",
     "test_type": "strategy_backtest",
-    "verdict": "untestable",
-    "verdict_reason": "this is a full strategy \u2014 needs a backtest engine (not in v1)"
+    "testable": "no",
+    "reason_if_not": "No specific instrument or currency pair named; 'forex and gold markets' is too broad to backtest without disambiguating to a specific ticker \u2014 the most common failure mode flagged in prior traces for this test type.",
+    "confidence": 0.62,
+    "test_type_justification": "Mechanical entry trigger (RSI divergence aligned with EMA 200 trend direction) and exit rule (1:2 RR fixed) are both defined; only instrument disambiguation is missing."
+  },
+  {
+    "id": "c2",
+    "statement": "This RSI divergence + EMA 200 strategy works across all markets including gold, forex, and day trading.",
+    "instrument": null,
+    "timeframe": null,
+    "test_type": "none",
+    "testable": "no",
+    "reason_if_not": "Blanket assertion with no specific instrument, timeframe, or measurable success criterion \u2014 not falsifiable as stated.",
+    "confidence": 0.92,
+    "test_type_justification": ""
+  },
+  {
+    "id": "c3",
+    "statement": "On timeframes smaller than 15 minutes, this strategy produces more losses and higher risk than on 15-minute-and-above timeframes.",
+    "instrument": null,
+    "timeframe": null,
+    "test_type": "none",
+    "testable": "no",
+    "reason_if_not": "Stated as qualitative advice with no instrument specified, no quantitative loss-rate threshold, and no comparative data provided.",
+    "confidence": 0.8,
+    "test_type_justification": ""
   }
 ]

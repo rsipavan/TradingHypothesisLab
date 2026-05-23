@@ -62,6 +62,20 @@ def run(
     instrument = claim.instrument or "SPY"
     timeframe = claim.timeframe or "1D"
 
+    # A claim whose "instrument" is actually a multi-asset basket (e.g. a 10-symbol
+    # portfolio) cannot be reproduced on the strategy tester, which backtests ONE symbol
+    # at a time. Decline honestly instead of silently backtesting one arbitrary leg (or a
+    # bogus combined symbol) and passing it off as the portfolio result.
+    multi, n_assets = _is_multi_asset(instrument)
+    if multi:
+        return _failed(
+            claim,
+            f"claim spans a multi-asset portfolio ({n_assets} instruments: {instrument}); "
+            "the TradingView strategy tester backtests one symbol at a time, so a "
+            "portfolio-level aggregate cannot be reproduced as a single backtest — it would "
+            "need a per-asset scan and re-aggregation, out of scope for a single-symbol test",
+        )
+
     # --- step 1: synthesize (or reuse cached script) ---
     if cached_script:
         script = cached_script
@@ -287,7 +301,17 @@ def _synthesize(
         "   user can relax it to 40 if needed)\n"
         "5. Add a 'lookbackBars' or 'maxSetupBars' input (default 500) that expires stale setups "
         "   so they don't block new ones indefinitely\n"
-        "6. Output ONLY the Pine Script code — no markdown fences, no explanation text\n"
+        "6. NO LOOK-AHEAD BIAS — non-negotiable for an honest backtest:\n"
+        "   - Evaluate entry/exit conditions ONLY on confirmed values from the current or prior "
+        "     bars; never reference future bars.\n"
+        "   - If you use request.security() for a higher timeframe you MUST pass "
+        "     lookahead=barmerge.lookahead_off and read the previous completed value (index [1]) "
+        "     so no future higher-timeframe data leaks in. NEVER use barmerge.lookahead_on.\n"
+        "   - Do NOT set calc_on_every_tick=true; leave it default so historical and realtime "
+        "     behave identically and signals do not repaint.\n"
+        "7. Model realistic costs in the strategy() header: commission_type, commission_value, "
+        "   and slippage — the backtest must not be frictionless.\n"
+        "8. Output ONLY the Pine Script code — no markdown fences, no explanation text\n"
     )
 
     if snippets:
@@ -364,9 +388,13 @@ def _clear_chart_indicators(mcp: McpClient) -> None:
     )
     for ind in indicators:
         entity_id = ind.get("id") or ind.get("entityId") or ind.get("entity_id")
+        name = ind.get("name") or ind.get("title") or ""
         if entity_id:
             try:
-                mcp.call("chart_manage_indicator", {"action": "remove", "id": entity_id})
+                # remove requires BOTH entity_id and the indicator name (per MCP schema);
+                # passing only {"id": ...} silently no-ops and the indicator cap stays full.
+                mcp.call("chart_manage_indicator",
+                         {"action": "remove", "entity_id": entity_id, "indicator": name})
             except McpError:
                 pass
 
@@ -538,6 +566,25 @@ def _parse_strategy_results(res) -> StrategyBacktestMetrics | None:
 # ---------------------------------------------------------------------------
 # helpers
 # ---------------------------------------------------------------------------
+
+
+def _is_multi_asset(instrument: str) -> tuple[bool, int]:
+    """Detect when a claim's 'instrument' is really a basket of several symbols.
+
+    The strategy tester runs one symbol per backtest, so a portfolio-level claim
+    (e.g. "BTC,ETH,XRP,GOLD,OIL,SPX,AAPL,FX") is not reproducible as a single test.
+    Returns (is_multi, n_assets). A single forex pair like "EUR/USD" is NOT multi
+    (no comma, no basket keyword).
+    """
+    s = (instrument or "").strip()
+    low = s.lower()
+    if "portfolio" in low or "basket" in low:
+        parts = [p for p in re.split(r"[,/]|\band\b", s) if p.strip()]
+        return True, max(len(parts), 2)
+    parts = [p for p in s.split(",") if p.strip()]
+    if len(parts) >= 2:
+        return True, len(parts)
+    return False, 1
 
 
 def _failed(claim: Claim, reason: str) -> ValidationRun:
