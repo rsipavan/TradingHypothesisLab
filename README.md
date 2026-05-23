@@ -199,7 +199,7 @@ D5 Inverse-edge    PASS   inverse PF 0.05 — the directional edge is real, not 
 
 It's honest about its own reach: the engine models the strategy's *inferred logic*, not the literal Pine on TradingView — every scorecard says so and reports the inference confidence. A strategy that maps to no known archetype, or fires too few trades, gets `not_assessed` on the affected checks, which caps the grade below *Robust*. You can't be rated robust on a check that never ran — the same epistemic floor as the rest of the repo.
 
-Full rubric: [`docs/rigor_rubric.md`](docs/rigor_rubric.md).
+Worked example with the full scorecard: [`examples/rigor_supertrend_btc_overfit/`](examples/rigor_supertrend_btc_overfit/). Full rubric: [`docs/rigor_rubric.md`](docs/rigor_rubric.md).
 
 ---
 

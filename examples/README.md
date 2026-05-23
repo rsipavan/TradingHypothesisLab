@@ -48,3 +48,18 @@ See [`../docs/decision_logic.md`](../docs/decision_logic.md).
 | `08_spy_200sma_support_holds` | full extraction → indicator validation | 52 occurrences, 73% hit rate, above 65% threshold — **holds** |
 
 Examples #4–#5 demonstrate the `summary.skip_extraction` short-circuit. Examples #1–#3, #7–#8 walk the full pipeline. Example #6 exercises the Pine Script synthesis and strategy tester path.
+
+## Rigor checker examples (the second capability)
+
+These folders are **not** video runs — they're [rigor checker](../README.md#the-rigor-checker--is-this-backtest-trustworthy) runs. You paste a Pine strategy and get a scorecard of whether its *backtest* is trustworthy (not whether it's profitable). The bundle is:
+
+- `input.md` — the strategy, the test universe, and what the example demonstrates
+- `strategy.pine` — the pasted strategy under test
+- `scorecard.md` — the rigor scorecard (gates, scored dimensions, Sonnet 4.6 review, grade)
+- `scorecard.json` — the structured scorecard
+
+| Example | Strategy | Grade | What it demonstrates |
+|---|---|---|---|
+| [`rigor_supertrend_btc_overfit`](rigor_supertrend_btc_overfit/) | Supertrend reversal, BTC daily | **Likely overfit** | The real out-of-sample split the TradingView tester couldn't give: full-history PF ~1.8 looks fine, but the edge **inverts** out-of-sample (in-sample PF 2.54 → OOS PF 0.66) — curve-fitting, caught. |
+
+Generated with `python -m trading_hypothesis_lab.rigor <file.pine> -i <symbol> -t <tf> --no-tv`. The empirical engine models the strategy's *inferred* archetype on free OHLCV, not the literal Pine on TradingView — the scorecard says so. See [`../docs/rigor_rubric.md`](../docs/rigor_rubric.md) for the full rubric.
